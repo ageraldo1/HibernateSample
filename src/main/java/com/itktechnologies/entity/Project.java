@@ -33,8 +33,6 @@ public class Project {
 		this.end = end;
 	}
 	
-	
-	
 	public Project(String description, Date start, Date end, Collection<UserDetails> users) {
 		super();
 		this.description = description;
@@ -42,8 +40,6 @@ public class Project {
 		this.end = end;
 		this.users = users;
 	}
-
-
 
 	public Project()
 	{
@@ -81,7 +77,4 @@ public class Project {
 	public void setUsers(Collection<UserDetails> users) {
 		this.users = users;
 	}
-	
-	
-	
 }

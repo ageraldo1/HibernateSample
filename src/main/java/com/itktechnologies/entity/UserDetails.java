@@ -7,6 +7,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
@@ -50,16 +51,15 @@ public class UserDetails {
 	@JoinTable(name="address", joinColumns=@JoinColumn(name="usr_id"))
 	private List<Address> userAddresses = new ArrayList<>(); 
 
-	@OneToOne
+	@OneToOne(cascade={CascadeType.PERSIST})
 	@JoinColumn(name="role_id")
 	private UserRole role;
 	
-	@OneToMany(mappedBy="user")
+	@OneToMany(mappedBy="user", cascade={CascadeType.PERSIST})
 	//@JoinTable(name="user_vehicle", joinColumns=@JoinColumn(name="user_id"),inverseJoinColumns=@JoinColumn(name="vehicle_id"))
-
 	private Set<Vehicle> vehicle = new HashSet<>();	
 	
-	@ManyToMany()
+	@ManyToMany(cascade={CascadeType.PERSIST})
 	@JoinTable(name="usr_projects")	
 	private Collection<Project> project = new HashSet<>();
 

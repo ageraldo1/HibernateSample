@@ -71,16 +71,17 @@ public class App
 			session = factory.getCurrentSession();
 			
 			session.beginTransaction();
-				session.save(userRole);
-				
-				Iterator<Vehicle> iterator = user.getVehicle().iterator();
-				
-				while (iterator.hasNext()) {
-					session.save(iterator.next());
-				}
-
-				session.save(userProject);
-				session.save(user);
+//				session.save(userRole);
+//				
+//				Iterator<Vehicle> iterator = user.getVehicle().iterator();
+//				
+//				while (iterator.hasNext()) {
+//					session.save(iterator.next());
+//				}
+//
+//				session.save(userProject);
+//				session.save(user);
+				session.persist(user);
 			session.getTransaction().commit();
 			
 		} catch (Exception ex) {
