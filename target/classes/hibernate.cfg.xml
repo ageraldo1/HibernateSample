@@ -23,6 +23,11 @@
 
 		<!-- Set the current session context -->
 		<property name="current_session_context_class">thread</property>
+		
+		<!-- XML Class injection (not using addAnnotatedClass -->
+		 
+		<mapping class="com.itktechnologies.entity.UserDetails" />
+		
  
     </session-factory>
 

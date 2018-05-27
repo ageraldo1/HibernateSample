@@ -46,6 +46,11 @@ public class UserDetails {
 		this.description = description;
 	}
 	
+	public UserDetails() {
+		super();
+	}
+
+
 	public int getUserId() {
 		return userId;
 	}
@@ -76,5 +81,11 @@ public class UserDetails {
 	}
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	@Override
+	public String toString() {
+		return "UserDetails [userId=" + userId + ", userName=" + userName + ", created=" + created + ", address="
+				+ address + ", description=" + description + ", ignoreColumn=" + ignoreColumn + "]";
 	}
 }
