@@ -27,7 +27,9 @@
 		<!-- XML Class injection (not using addAnnotatedClass -->
 		 
 		<mapping class="com.itktechnologies.entity.UserDetails" />
-		
+		<mapping class="com.itktechnologies.entity.Vehicle" />
+		<mapping class="com.itktechnologies.entity.UserRole" />
+		<mapping class="com.itktechnologies.entity.Project" />
  
     </session-factory>
 

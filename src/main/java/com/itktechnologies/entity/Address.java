@@ -1,5 +1,8 @@
 package com.itktechnologies.entity;
 
+import javax.persistence.Embeddable;
+
+@Embeddable
 public class Address {
 	
 	private String street;
@@ -13,6 +16,10 @@ public class Address {
 		this.city = city;
 		this.state = state;
 		this.zipcode = zipcode;
+	}
+	
+	public Address() {
+		super();
 	}
 	
 	
