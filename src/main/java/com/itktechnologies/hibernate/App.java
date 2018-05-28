@@ -7,9 +7,14 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+
+import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
+import org.hibernate.query.Query;
 
 import com.itktechnologies.entity.Address;
 import com.itktechnologies.entity.Bike;
@@ -30,9 +35,12 @@ public class App
     {
     	init();
     		//addInheritance();
-    		add();
-    		search(1);
-    		update(1);
+    		//add();
+    		//search(1);
+    		//update(1);
+    	
+    		//bulkAdd();
+    		query();
     	shutdown();
     }
 
@@ -94,6 +102,27 @@ public class App
 			
 			session.getTransaction().rollback();
 		}
+    }
+    
+    public static void bulkAdd() {
+    	List<Address> userAddress = new ArrayList<>();
+    	
+    	userAddress.add(new Address("1020 Capstone CT", "Suwanee", "GA", "30024"));
+    	
+		try {
+			session = factory.getCurrentSession();
+			
+			session.beginTransaction();
+				for ( int i = 0; i < 100; i++) {
+					session.persist(new UserDetails("user00" + i, new Date(), userAddress, "Auto-generated user" ));
+				}				
+			session.getTransaction().commit();
+			
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			
+			session.getTransaction().rollback();
+		}    	
     }
     
     public static void search(int id) {
@@ -167,4 +196,89 @@ public class App
     	}
     	
     }
+
+    public static void query() {
+    	Query query = null;
+    	List<UserDetails> userList = null;
+    	int userId = 90;
+    	String userName = "user0094";
+    	
+		try {
+			// example 1 - bind variables
+			session = factory.getCurrentSession();
+			
+			session.beginTransaction();
+				query = session.createQuery("from UserDetails where userId > :userId and userName = :userName");
+				query.setParameter("userId", userId);
+				query.setParameter("userName", userName);
+				
+				query.setFirstResult(0);
+				query.setMaxResults(5);
+				
+				userList = query.list();
+
+				System.out.println("Size of the list....:" + userList.size());
+				
+				Iterator<UserDetails> iterator = userList.iterator();
+				
+				while ( iterator.hasNext()) {
+					System.out.println(iterator.next().getUserName());
+				}
+				
+			session.getTransaction().commit();
+			
+			//example 2 - named queries
+			session = factory.getCurrentSession();
+			session.beginTransaction();
+				query = session.getNamedQuery("UserDetails.byId");
+				query.setParameter("userId", userId);
+				userList = query.list();
+				
+
+				System.out.println("Size of the list....:" + userList.size());
+				
+				iterator = userList.iterator();
+				
+				while ( iterator.hasNext()) {
+					System.out.println(iterator.next().getUserName());
+				}				
+				
+			session.getTransaction().commit();
+			
+			
+			//example 3 - native query
+			
+			session = factory.getCurrentSession();
+			session.beginTransaction();
+				query = session.getNamedQuery("UserDetails.getVersion");
+				List<String> dbVersion = query.list();
+				
+				System.out.println("Database Version...:" + dbVersion.get(0));
+				System.out.println("Database Class.....:" + dbVersion.get(0).getClass());
+				
+			session.getTransaction().commit();
+			
+			//example 4 - criteria
+			// https://www.boraji.com/hibernate-5-criteria-query-example
+			
+//			session = factory.getCurrentSession();
+//			session.beginTransaction();
+//				CriteriaBuilder builder = factory.getCriteriaBuilder();
+//				CriteriaQuery<UserDetails> criteria = builder.createQuery(UserDetails.class);
+//				
+//				criteria.where(builder.equal("userName", userName));
+//				
+//				
+//
+//				
+//				
+//			session.getTransaction().commit();
+			
+			
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}		
+    	
+    }
+
 }

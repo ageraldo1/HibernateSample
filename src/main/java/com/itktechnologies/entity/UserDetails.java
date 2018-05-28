@@ -18,6 +18,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.NamedNativeQuery;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
@@ -27,6 +29,8 @@ import javax.persistence.Transient;
 
 @Entity
 @Table(name="user_details")
+@NamedQuery(name="UserDetails.byId", query="from UserDetails where userId = :userId")
+@NamedNativeQuery(name="UserDetails.getVersion", query="select version()")
 public class UserDetails {
 	
 	@Id
