@@ -9,7 +9,7 @@
         <property name="connection.password">SuperSecret123!</property>
 
         <!-- JDBC connection pool settings ... using built-in test pool -->
-        <property name="connection.pool_size">1</property>
+        <property name="connection.pool_size">10</property>
 
         <!-- Select our SQL dialect -->
         <property name="dialect">org.hibernate.dialect.MySQL57InnoDBDialect</property>
@@ -30,6 +30,8 @@
 		<mapping class="com.itktechnologies.entity.Vehicle" />
 		<mapping class="com.itktechnologies.entity.UserRole" />
 		<mapping class="com.itktechnologies.entity.Project" />
+		<mapping class="com.itktechnologies.entity.Car" />
+		<mapping class="com.itktechnologies.entity.Bike" />
  
     </session-factory>
 

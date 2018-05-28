@@ -12,6 +12,8 @@ import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 
 import com.itktechnologies.entity.Address;
+import com.itktechnologies.entity.Bike;
+import com.itktechnologies.entity.Car;
 import com.itktechnologies.entity.Project;
 import com.itktechnologies.entity.UserDetails;
 import com.itktechnologies.entity.UserRole;
@@ -27,8 +29,10 @@ public class App
     public static void main( String[] args )
     {
     	init();
+    		//addInheritance();
     		add();
     		search(1);
+    		update(1);
     	shutdown();
     }
 
@@ -49,6 +53,7 @@ public class App
     }
     
     public static void add() {
+
     	List<Address> userAddress = new ArrayList<>();
     	
     	userAddress.add(new Address("1020 Capstone CT", "Suwanee", "GA", "30024"));
@@ -114,5 +119,52 @@ public class App
     	} catch (Exception ex) {
     		ex.printStackTrace();
     	}
+    }
+
+    public static void addInheritance()
+    {
+    	Vehicle base = new Vehicle("Generic", "Base vehicle");
+    	Vehicle car = new Car("Honda", "CRV");
+    	Vehicle bike = new Bike("Honda", "CB-450");
+    	
+
+    	try {
+			session = factory.getCurrentSession();
+			
+			session.beginTransaction();
+				session.save(base);
+				session.save(car);
+				session.save(bike);
+			session.getTransaction().commit();
+		
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			
+			session.getTransaction().rollback();
+		}
+    	
+    }
+
+    public static void update(int id) {
+    	UserDetails user;
+    	
+    	try {
+    		session = factory.getCurrentSession();
+			session.beginTransaction();
+				user = session.get(UserDetails.class, id);
+				
+				if ( user != null ) {
+					user.setDescription("CRUD update");
+					
+				} else { 
+					System.out.println("User id " + id + " not found on the database");
+				}
+				
+				session.persist(user);
+		    session.getTransaction().commit();
+    	} catch (Exception ex) {
+    		ex.printStackTrace();
+    	}
+    	
     }
 }
