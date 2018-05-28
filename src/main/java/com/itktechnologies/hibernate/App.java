@@ -9,10 +9,12 @@ import java.util.Set;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.query.Query;
 
@@ -30,6 +32,7 @@ public class App
 {
 	private static SessionFactory factory;
 	private static Session session;
+	private static Transaction transaction;
 	
     public static void main( String[] args )
     {
@@ -40,7 +43,8 @@ public class App
     		//update(1);
     	
     		//bulkAdd();
-    		query();
+    		//query();
+    		cache();
     	shutdown();
     }
 
@@ -261,18 +265,29 @@ public class App
 			//example 4 - criteria
 			// https://www.boraji.com/hibernate-5-criteria-query-example
 			
-//			session = factory.getCurrentSession();
-//			session.beginTransaction();
-//				CriteriaBuilder builder = factory.getCriteriaBuilder();
-//				CriteriaQuery<UserDetails> criteria = builder.createQuery(UserDetails.class);
-//				
-//				criteria.where(builder.equal("userName", userName));
-//				
-//				
-//
-//				
-//				
-//			session.getTransaction().commit();
+			session = factory.getCurrentSession();
+			session.beginTransaction();
+				CriteriaBuilder builder = session.getCriteriaBuilder();
+				CriteriaQuery<UserDetails> criteriaQuery = builder.createQuery(UserDetails.class);
+				
+				Root<UserDetails> root = criteriaQuery.from(UserDetails.class);
+				criteriaQuery.select(root).where(builder.equal(root.get("userId"), 99));
+				
+				Query<UserDetails> q = session.createQuery(criteriaQuery);
+				
+				List<UserDetails> list = q.getResultList();
+				
+				iterator = list.iterator();
+				
+				while ( iterator.hasNext()) {
+					System.out.println(iterator.next().getUserName());
+				}
+				
+				System.out.println(list);
+				
+			
+			session.getTransaction().commit();
+			
 			
 			
 		} catch (Exception ex) {
@@ -281,4 +296,44 @@ public class App
     	
     }
 
+    public static void cache() {
+    	// https://www.journaldev.com/2980/hibernate-ehcache-hibernate-second-level-cache
+    	
+    	UserDetails user;
+    	
+    	try {
+    		session = factory.openSession();
+				user = session.get(UserDetails.class, 1);			
+				//System.out.println(user);
+			
+		    
+    	} catch (Exception ex) {
+    		ex.printStackTrace();
+    		
+    		//if ( transaction != null) {
+    		//	transaction.rollback();
+    		//}
+    	} finally {
+    		session.close();
+    	}
+    	
+    	
+    	try {
+    		session = factory.openSession();
+				user = session.get(UserDetails.class, 1);			
+				//System.out.println(user);
+			
+		    
+    	} catch (Exception ex) {
+    		ex.printStackTrace();
+    		
+    		//if ( transaction != null) {
+    		//	transaction.rollback();
+    		//}
+    	} finally {
+    		session.close();
+    	}
+    	
+    	
+    }
 }

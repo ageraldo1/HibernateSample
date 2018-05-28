@@ -1,3 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-configuration SYSTEM "classpath://org/hibernate/hibernate-configuration-3.0.dtd">
+
 <hibernate-configuration>
 
     <session-factory>
@@ -15,12 +18,22 @@
         <property name="dialect">org.hibernate.dialect.MySQL57InnoDBDialect</property>
 
         <!-- Echo the SQL to stdout -->
-        <property name="show_sql">true</property>
+        <property name="hibernate.show_sql">true</property>
+        <property name="hibernate.format_sql">true</property>
 
         <!-- Drop and re-create the database schema on startup -->
         <property name="hbm2ddl.auto">update</property>
         
+        <!-- Disable the second-level cache -->
+        <!--<property name="cache.provider_class">org.hibernate.cache.NoCacheProvider</property>-->
+        
+        <property name="hibernate.cache.region.factory_class">org.hibernate.cache.ehcache.EhCacheRegionFactory</property>
 
+		 <!-- enable second level cache and query cache -->
+		<property name="hibernate.cache.use_second_level_cache">true</property>
+		<property name="hibernate.cache.region.factory_class">org.hibernate.cache.ehcache.EhCacheRegionFactory</property>
+		<property name="hibernate.javax.cache.provider">net.sf.ehcache.hibernate.EhCacheProvider</property>		 
+		  
 		<!-- Set the current session context -->
 		<property name="current_session_context_class">thread</property>
 		
@@ -32,6 +45,9 @@
 		<mapping class="com.itktechnologies.entity.Project" />
 		<mapping class="com.itktechnologies.entity.Car" />
 		<mapping class="com.itktechnologies.entity.Bike" />
+		
+		
+		
  
     </session-factory>
 
